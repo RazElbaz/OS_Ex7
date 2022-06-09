@@ -260,4 +260,22 @@ size_t myread(int myfd, void *buf, size_t count) {
     return myopenfiles[myfd].pos;
 }
 
+size_t mywrite(int myfd, const void *buf, size_t count) {
+    if (myopenfiles[myfd].fd == -1 || myopenfiles[myfd].pos == -1) {
+        printf("Error:There is an error reading from the file");
+        return -1;
+    }
+    if (inodes[myfd].isFile == false) {
+        printf("Error: You cannot read anything that is not a file in this function");
+        return -1;
+    }
+    for (int i = 0; i < count; i++) {
+        write_byte(myfd, myopenfiles[myfd].pos, ((char *) buf)[i]);
+        //increase the position for write the next byte
+        myopenfiles[myfd].pos++;
+    }
+    return (size_t)(myopenfiles[myfd].pos);
+
+}
+
 
