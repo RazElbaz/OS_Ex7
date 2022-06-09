@@ -206,7 +206,6 @@ int mymount(const char *source, const char *target, const char *filesystemtype, 
         return -1;
     }
     if (filesystemtype == NULL) {
-        printf("Invalid filesystemtype name");
         return -1;
     }
     mount_fs(source);

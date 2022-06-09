@@ -145,6 +145,13 @@ int main() {
     } else {
         printf("Test2: Reading string | status: Failed\n");
     }
+    ///Test 3 mymount function
+    int mymMount=mymount("fs_data.txt", "home", NULL,0,"Task7");
+    if (mymMount) {
+        printf("Test function: mymount | status: Passed\n");
+    } else {
+        printf("Test function: mymount | status: Failed\n");
+    }
 
 
     printf("\n*************************************************\n");
