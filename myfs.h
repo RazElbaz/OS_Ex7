@@ -41,7 +41,7 @@ void create_fs();// initialize new file system
 void syns_fs();//write the file system
 void mount_fs();//load file system
 void print_fs();// print out info about the file system
-int allocate_file(const char *name);//return file number
+int allocate_file(const char *name,int size);//return file number
 void set_filesize(int filenum, int size);//set the size of the file
 void write_byte(int filenum, int pos,  char data);
 

@@ -23,7 +23,7 @@ void create_fs() {
     for (int i = 0; i < sb.num_blocks; i++) {
         dbs[i].next_block_num = -1;
     }
-    int firstDoc = allocate_file("home");
+    int firstDoc = allocate_file("home",64);
     if (firstDoc != 0) {
         printf("Error: cant build firstDoc");
         return;
@@ -131,15 +131,15 @@ int find_empty_block() {
     return -1;
 }
 
-int allocate_file(const char *name) {
+int allocate_file(const char *name,int size) {
     //find an empty inode
     int in = find_empty_inode();
     //find / claim a disk block
     int block = find_empty_block();
     //claim them
     inodes[in].first_block = block;
+    inodes[in].size = size;
     dbs[block].next_block_num = -2;
-
     strcpy(inodes[in].name, name);
     //return the file description
     return in;
@@ -189,6 +189,7 @@ void write_byte(int filenum, int pos, char data) {
                 offset = dbs[offset].next_block_num;
         }
     }
+    inodes[filenum].size++;
     dbs[offset].data[pos] = data;
 }
 
@@ -331,7 +332,7 @@ int lastDirectory(const char *path, const char *name) {
     if (inodes[myfd].isFile == true) {return -1;}
 
     struct mydirent *mydirent = (struct mydirent *)dbs[inodes[myfd].first_block].data;
-    int file = allocate_file(name);
+    int file = allocate_file(name,1);
     mydirent->inside[mydirent->size++] = file;
     inodes[file].isFile = false;
     return file;
@@ -412,7 +413,7 @@ int myopen(const char *pathname, int flags) {
             return j;
         }
     }
-    int file = allocate_file(curr);
+    int file = allocate_file(curr,1);
     struct mydirent *mydirent = myreaddir((myopendir(old)));
     mydirent->inside[mydirent->size++] = file;
     //init:
