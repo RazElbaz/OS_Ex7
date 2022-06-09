@@ -1,6 +1,7 @@
 #include "myfs.h"
 #include <stdio.h>
 #include <string.h>
+#include "assert.h"
 
 
 int main() {
@@ -12,6 +13,7 @@ int main() {
     int openDir1 = myopendir("home/Task7");
     int openDir2 = myopendir("home/Task7");
 
+    assert(openDir1 == openDir2);
     if (openDir1 == openDir2) {
         printf("Test function: myopendir | status: Passed\n");
     } else {
@@ -26,11 +28,13 @@ int main() {
     int openFile4 = myopen("home/Task7/file2", 0);
     int openFile5 = myopen("home/new_dic/file2", 0);
 
+    assert(openFile1 == openFile2);
     if (openFile1 == openFile2) {
         printf("Test function: myopen | status: Passed\n");
     } else {
         printf("Test function: myopen | status: Failed\n");
     }
+    assert(openFile3 == openFile5);
     if (openFile3 == openFile5) {
         printf("Test function: myopen | status: Passed\n");
     } else {
@@ -38,16 +42,19 @@ int main() {
     }
 
     ///Test two different folders but the same file inside them
+    assert(openFile3 == openFile4);
     if (openFile3 == openFile4) {
         printf("Test: different folders | status: Passed\n");
     } else {
         printf("Test: different folders | status: Failed\n");
     }
+    assert(openFile5 == openFile3);
     if (openFile5 == openFile3) {
         printf("Test: different folders | status: Passed\n");
     } else {
         printf("Test: different folders | status: Failed\n");
     }
+    assert(openFile5 == openFile4);
     if (openFile5 == openFile4) {
         printf("Test: different folders | status: Passed\n");
     } else {
@@ -57,6 +64,7 @@ int main() {
 
     ///Test myclose functuin:
     openFile2 = myclose(openFile2);
+    assert(openFile1 != openFile2);
     if (openFile1 != openFile2) {
         printf("Test function: myclose | status: Passed\n");
     } else {
@@ -66,6 +74,7 @@ int main() {
     ///Test mywrite function
     char *string = "Our Ufs @c-Raz, Amir\n";
     int myWrite = mywrite(openFile3, string, 25);
+    assert(myWrite != -1);
     if (myWrite != -1) {
         printf("Test function: mywrite | status: Passed\n");
     } else {
@@ -75,6 +84,7 @@ int main() {
     ///Test mylseek function
     char s1[30], s2[30];
     int myLseek = mylseek(openFile3, -30, SEEK_CUR);
+    assert(myLseek != -1);
     if (myLseek != -1) {
         printf("Test function: mylseek | status: Passed\n");
     } else {
@@ -83,6 +93,7 @@ int main() {
 
     ///Test myread function
     int myRead = myread(openFile3, s1, 25);
+    assert(myRead != -1);
     if (myRead != -1) {
         printf("Test function: myread | status: Passed\n");
     } else {
@@ -91,6 +102,7 @@ int main() {
 
     ///Test 2 mylseek function
     int myLseek2 = mylseek(openFile3, -20, SEEK_CUR);
+    assert(myLseek2 != -1);
     if (myLseek2 != -1) {
         printf("Test2 function: mylseek | status: Passed\n");
     } else {
@@ -99,6 +111,7 @@ int main() {
 
     ///Test 2 myread function
     int myRead2 = myread(openFile3, s2, 25);
+    assert(myRead2 != -1);
     if (myRead2 != -1) {
         printf("Test2 function: myread | status: Passed\n");
     } else {
@@ -117,6 +130,7 @@ int main() {
 
     ///Test2 mywrite function
     int myWrite2 = mywrite(openFile6, string2, 5000);
+    assert(myWrite2 != -1);
     if (myWrite2 != -1) {
         printf("Test2 function: mywrite | status: Passed\n");
     } else {
@@ -126,6 +140,7 @@ int main() {
 
     ///Test 3 myread function
     int myRead3 = myread(openFile6, BIG, 15);
+    assert(myRead3 != -1);
     if (myRead3 != -1) {
         printf("Test2 function: myread | status: Passed\n");
     } else {
@@ -134,12 +149,13 @@ int main() {
 
     ///Test 3 mylseek function
     int myLseek3 = mylseek(openFile6, -15, SEEK_CUR);
+    assert(myLseek3 != -1);
     if (myLseek3 != -1) {
         printf("Test3 function: mylseek | status: Passed\n");
     } else {
         printf("Test3 function: mylseek | status: Failed\n");
     }
-
+    assert(!strcmp(BIG, "rrazamirrazamir"));
     if (!strcmp(BIG, "rrazamirrazamir")) {
         printf("Test2: Reading string | status: Passed\n");
     } else {
@@ -147,6 +163,7 @@ int main() {
     }
     ///Test 3 mymount function
     int mymMount=mymount("fs_data.txt", "home", NULL,0,"Task7");
+    assert(mymMount);
     if (mymMount) {
         printf("Test function: mymount | status: Passed\n");
     } else {
