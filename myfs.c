@@ -278,4 +278,49 @@ size_t mywrite(int myfd, const void *buf, size_t count) {
 
 }
 
+int mylseek(int myfd, off_t offset, int whence) {
+    /**
+     *  lseek - reposition read/write file offset
+     *  lseek() repositions the file offset of the open file description
+       associated with the file descriptor fd to the argument offset
+       according to the directive whence as follows:
+
+       SEEK_SET
+              The file offset is set to offset bytes.
+
+       SEEK_CUR
+              The file offset is set to its current location plus offset
+              bytes.
+
+       SEEK_END
+              The file offset is set to the size of the file plus offset
+              bytes.
+       @return
+       Upon successful completion, lseek() returns the resulting offset
+       location as measured in bytes from the beginning of the file.  On
+       error, the value (off_t) -1 is returned and errno is set to
+       indicate the error.
+     */
+    //credit: https://www.programiz.com/c-programming/c-switch-case-statement
+    if (myopenfiles[myfd].fd == myfd) {
+        switch (whence) {
+            case SEEK_SET:
+                myopenfiles[myfd].pos = offset;
+                break;
+            case SEEK_END:
+                myopenfiles[myfd].pos = inodes[myfd].size + offset;
+                break;
+
+            case SEEK_CUR:
+                myopenfiles[myfd].pos += offset;
+                break;
+                // whence doesn't match any case constant SEEK_SET, SEEK_END, SEEK_CUR
+            default:
+                myopenfiles[myfd].pos = 0;
+        }
+    } else {
+        return -1;
+    }
+    return myopenfiles[myfd].pos;
+}
 
