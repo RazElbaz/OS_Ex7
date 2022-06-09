@@ -324,3 +324,99 @@ int mylseek(int myfd, off_t offset, int whence) {
     return myopenfiles[myfd].pos;
 }
 
+int lastDirectory(const char *path, const char *name) {
+    int myfd = myopendir(path);
+
+    if (myfd == -1) {return -1;}
+    if (inodes[myfd].isFile == true) {return -1;}
+
+    struct mydirent *mydirent = (struct mydirent *)dbs[inodes[myfd].first_block].data;
+    int file = allocate_file(name);
+    mydirent->inside[mydirent->size++] = file;
+    inodes[file].isFile = false;
+    return file;
+}
+
+struct myDIR *myopendir(const char *name) {
+    /**
+     * The opendir() function opens a directory stream corresponding to
+       the directory name, and returns a pointer to the directory
+       stream.  The stream is positioned at the first entry in the
+       directory
+     *@return    The opendir() function return a pointer to the
+       directory stream.  On error, NULL is returned, and errno is set
+       to indicate the error.
+       @credit: https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm
+     */
+    if(!name){ return NULL;}
+    char curr[8] = "", old[8] = "",string[100];
+    strcpy(string, name);
+    for(char *i = strtok(string, "/"); i != NULL; i = strtok(NULL, "/")){
+        strcpy(old, curr);
+        strcpy(curr, i);}
+
+    for (int j = 0; j < sb.num_inodes; j++) {
+        if (strcmp(inodes[j].name, curr) == false) {
+            if (inodes[j].isFile != false) {
+                return NULL;
+            }
+            return (struct myDIR *) j;
+        }}
+    return lastDirectory(old, curr);
+}
+
+struct mydirent *myreaddir(int dirp) {
+    return (struct mydirent *) dbs[inodes[dirp].first_block].data;
+}
+
+int myclosedir(struct myDIR *dirp) {
+    /**
+     * The closedir() function closes the directory stream associated
+       with dirp.  A successful call to closedir() also closes the
+       underlying file descriptor associated with dirp.
+       @return
+       The closedir() function returns 0 on success.  On error, -1 is
+       returned, and errno is set to indicate the error.
+     */
+    if (!dirp) return -1;
+    free(dirp);
+    return 0;
+}
+
+int myopen(const char *pathname, int flags) {
+    /**
+   *The open() system call opens the file specified by pathname.  If
+   the specified file does not exist, it may optionally (if O_CREAT
+   is specified in flags) be created by open().
+    @return
+   The return value of open() is a file descriptor, a small,
+   non negative integer that is an index to an entry in the process's
+   table of open file descriptors.
+   @credit: https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm
+
+ */
+    if(!pathname){return -1;}
+    char str[100],curr[8], old[8];
+    strcpy(str, pathname);
+    for(char *i = strtok(str, "/"); i != NULL; i = strtok(NULL, "/")){
+        strcpy(old, curr);
+        strcpy(curr, i);}
+
+    for (int j = 0; j < sb.num_inodes; j++) {
+        if (strcmp(inodes[j].name, curr) == false) {
+            if (inodes[j].isFile == false) {
+                return -1;
+            }
+            myopenfiles[j].fd = j;
+            myopenfiles[j].pos = 0;
+            return j;
+        }
+    }
+    int file = allocate_file(curr);
+    struct mydirent *mydirent = myreaddir((myopendir(old)));
+    mydirent->inside[mydirent->size++] = file;
+    //init:
+    myopenfiles[file].fd = file;
+    myopenfiles[file].pos = 0;
+    return file;
+}
