@@ -231,4 +231,33 @@ int myclose(int myfd) {
     return -1;
 }
 
+////check the for loop
+size_t myread(int myfd, void *buf, size_t count) {
+    /**
+     * read() attempts to read up to count bytes from file descriptor fd
+       into the buffer starting at buf.
+       @return
+       On error, -1 is returned, and errno is set to indicate the error.
+       In this case, it is left unspecified whether the file position
+       (if any) changes.
+     */
+    if (myopenfiles[myfd].fd == -1 || myopenfiles[myfd].pos == -1) {
+        printf("Error:There is an error reading from the file");
+        return -1;
+    }
+    if (inodes[myfd].isFile == false) {
+        printf("Error: You cannot read anything that is not a file in this function");
+        return -1;
+    }
+    size_t size = count,i=0;
+    char *buff = malloc(sizeof(char) * size);
+    while (i<count){
+        buff[i++] = dbs[myfd].data[myopenfiles[myfd].pos];
+        myopenfiles[myfd].pos++;
+    }
+    strcpy(buf, buff);
+    free(buff);
+    return myopenfiles[myfd].pos;
+}
+
 
