@@ -193,4 +193,42 @@ void write_byte(int filenum, int pos, char data) {
 }
 
 
+int mymount(const char *source, const char *target, const char *filesystemtype, unsigned long mountflags,
+            const void *data) {
+    /**
+     * The mount command serves to attach the filesystem found on some device to the big file tree. Conversely, the umount(8) command will detach it again.
+     */
+    if (source == NULL) {
+        return -1;
+    }
+    if (target == NULL) {
+        return -1;
+    }
+    if (filesystemtype == NULL) {
+        printf("Invalid filesystemtype name");
+        return -1;
+    }
+    mount_fs(source);
+    syns_fs(target);
+    return 0;
+}
+
+
+int myclose(int myfd) {
+    /**
+     *close() closes a file descriptor, so that it no longer refers to
+       any file and may be reused.
+       @return
+       close() returns zero on success.  On error, -1 is returned, and
+       errno is set to indicate the error.
+     */
+    ///credit: https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm
+    if (myopenfiles[myfd].pos >= 0 && myopenfiles[myfd].fd >= 0 && myfd >= 0) {
+        myopenfiles[myfd].pos = -1;
+        myopenfiles[myfd].fd = -1;
+        return 0;
+    }
+    return -1;
+}
+
 
