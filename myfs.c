@@ -1,8 +1,5 @@
 #include "myfs.h"
 
-
-
-
 void create_fs() {
     //init the sizes of the inodes and the blocks
     sb.num_inodes = 10;
@@ -197,12 +194,15 @@ int mymount(const char *source, const char *target, const char *filesystemtype, 
      * The mount command serves to attach the filesystem found on some device to the big file tree. Conversely, the umount(8) command will detach it again.
      */
     if (source == NULL) {
+        errno = EINVAL; // invalid argument error
         return -1;
     }
     if (target == NULL) {
+        errno = EINVAL; // invalid argument error
         return -1;
     }
     if (filesystemtype == NULL) {
+        errno = EINVAL; // invalid argument error
         return -1;
     }
     mount_fs(source);
@@ -225,6 +225,7 @@ int myclose(int myfd) {
         myopenfiles[myfd].fd = -1;
         return 0;
     }
+    errno = EBADF; //Bad file number
     return -1;
 }
 
@@ -239,10 +240,12 @@ size_t myread(int myfd, void *buf, size_t count) {
        (if any) changes.
      */
     if (myopenfiles[myfd].fd == -1 || myopenfiles[myfd].pos == -1) {
+        errno = ENOENT; // No such file or directory
         printf("Error:There is an error reading from the file");
         return -1;
     }
     if (inodes[myfd].isFile == false) {
+        errno = ENOENT; // No such file or directory
         printf("Error: You cannot read anything that is not a file in this function");
         return -1;
     }
@@ -259,11 +262,13 @@ size_t myread(int myfd, void *buf, size_t count) {
 
 size_t mywrite(int myfd, const void *buf, size_t count) {
     if (myopenfiles[myfd].fd == -1 || myopenfiles[myfd].pos == -1) {
-        printf("Error:There is an error reading from the file");
+        errno = ENOENT; // No such file or directory
+        printf("Error:There is an error writing from the file");
         return -1;
     }
     if (inodes[myfd].isFile == false) {
-        printf("Error: You cannot read anything that is not a file in this function");
+        errno = ENOENT; // No such file or directory
+        printf("Error: You cannot write anything that is not a file in this function");
         return -1;
     }
     for (int i = 0; i < count; i++) {
@@ -312,7 +317,8 @@ int mylseek(int myfd, off_t offset, int whence) {
             default:
                 myopenfiles[myfd].pos = 0;
         }
-    } else {
+    } else { // error in seeking
+        errno = ESPIPE; // illegal seek!
         return -1;
     }
     return myopenfiles[myfd].pos;
@@ -342,7 +348,10 @@ struct myDIR *myopendir(const char *name) {
        to indicate the error.
        @credit: https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm
      */
-    if(!name){ return NULL;}
+    if(!name){
+        errno = EINVAL; // invalid argument error
+        return NULL;
+    }
     char curr[8] = "", old[8] = "",string[100];
     strcpy(string, name);
     for(char *i = strtok(string, "/"); i != NULL; i = strtok(NULL, "/")){
@@ -372,7 +381,10 @@ int myclosedir(struct myDIR *dirp) {
        The closedir() function returns 0 on success.  On error, -1 is
        returned, and errno is set to indicate the error.
      */
-    if (!dirp) return -1;
+    if (!dirp) {
+        errno = ENOENT; // No such file or directory.
+        return -1;
+    }
     free(dirp);
     return 0;
 }
@@ -388,7 +400,10 @@ int myopen(const char *pathname, int flags) {
    table of open file descriptors.
    @credit: https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm
  */
-    if(!pathname){return -1;}
+    if(!pathname){
+        errno = ENOENT; // No such file or directory in given path.
+        return -1;
+    }
     char str[100],curr[8], old[8];
     strcpy(str, pathname);
     for(char *i = strtok(str, "/"); i != NULL; i = strtok(NULL, "/")){

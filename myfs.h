@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "stdbool.h"
+#include <errno.h>
+
 
 /**
  * For the basic file system implementation:
