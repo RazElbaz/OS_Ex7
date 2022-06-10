@@ -203,13 +203,42 @@ int main() {
     } else {
         printf("Test function: myopen| fd  | status: Failed\n");
     }
-    char test[5];
-    int myFread= myfread(test,1,5, myfd);;
-    if  (myFread>0) {
-        printf("Test function: myfopen | fd | status: Passed\n");
+    ///Test myfwrite
+    int myFwrite=myfwrite("abcds",1, 5,myfd);
+    if  (myFwrite==(int) (myfd->data)+5) {
+        printf("Test function: myfwrite | status: Passed\n");
     } else {
-        printf("Test function: myopen| fd  | status: Failed\n");
+        printf("Test function: myfwrite  | status: Failed\n");
     }
+//    ///Test myfwrite
+//    char *read = NULL;
+//    int myFread=myfread(read,1, 5,myfd);
+//    if  (myFread>0) {
+//        printf("Test function: myfread | status: Passed\n");
+//    } else {
+//        printf("Test function: myfread  | status: Failed\n");
+//    }
+
+
+    ///Test myfprintf
+    char c = 'R';
+    int n = 10;
+    printf("%d\n",myfd->size);
+    if  (myfprintf(myfd, "%c%d", c, n)) {
+        printf("%c %d\n", c,n);
+        printf("Test function: myfprintf | status: Passed\n");
+    } else {
+        printf("Test function: myfprintf  | status: Failed\n");
+    }
+    printf("%d\n",myfd->size);
+
+    ///Test myfprintf
+//    myfscanf(myfd, "%c%d", &c, &n);
+//    if  () {
+//        printf("Test function: myfprintf | status: Passed\n");
+//    } else {
+//        printf("Test function: myfprintf  | status: Failed\n");
+//    }
     printf("\n*************************************************\n");
 
     return 0;
