@@ -46,5 +46,5 @@ developed in section 5. You should submit both the server and client.
 ##  Run:
 In order to run the tests for the file system, do the following:  
 1. make 
-2. run ./test
+2. run ```./test```
 3. enjoy seeing the tests :)!  
