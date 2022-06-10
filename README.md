@@ -12,6 +12,7 @@ The file system. In your file system, 10% of the space will be automatically all
 Be a super block and the rest are regular blocks. In addition it can be assumed that mkfs produces the main directory.
 Implement the following functions and the data structure myDIR mydirent:
 
+```
 int mymount(const char *source, const char *target, const char *filesystemtype, unsigned longmountflags, const void *data);
 
 int myopen(const char *pathname, int flags);
@@ -29,8 +30,11 @@ myDIR *myopendir(const char *name);
 struct mydirent *myreaddir(myDIR *dirp);
 
 int myclosedir(myDIR *dirp);
+```
 
 ## Mylibc
+
+```
 Above the file system) implemented in the previous section (yours you must implement the structure
 myFILE *
 And the functions:
@@ -50,9 +54,7 @@ int myfseek(myFILE *stream, long offset, int whence);
 int myfscanf(myFILE *restrict stream,const char *restrict format, ...);
 
 int myfprintf(myFILE *restrict stream, const char *restrict format, ...);
-
-
-
+```
 
 ##  Run:
 In order to run the tests for the file system, do the following:  
