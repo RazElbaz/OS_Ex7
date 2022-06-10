@@ -12,14 +12,23 @@ A program that creates the file in which you will find a file system receives a 
 The file system. In your file system, 10% of the space will be automatically allocated to one-block nodes
 Be a super block and the rest are regular blocks. In addition it can be assumed that mkfs produces the main directory.
 Implement the following functions and the data structure myDIR mydirent:
+
 int mymount(const char *source, const char *target, const char *filesystemtype, unsigned longmountflags, const void *data);
+
 int myopen(const char *pathname, int flags);
+
 int myclose(int myfd);
+
 size_t myread(int myfd, void *buf, size_t count);
+
 size_t mywrite(int myfd, const void *buf, size_t count);
+
 off_t mylseek(int myfd, off_t offset, int whence);
+
 myDIR *myopendir(const char *name);
+
 struct mydirent *myreaddir(myDIR *dirp);
+
 int myclosedir(myDIR *dirp);
 
 Additional facilitations and guidelines
