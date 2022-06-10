@@ -1,9 +1,8 @@
-#include "myfs.h"
+
 #include <stdio.h>
 #include <string.h>
 #include "assert.h"
-
-
+#include "mylibc.h"
 int main() {
     printf("*****************************************\n");
     printf("Welcome to our file system implementation\n");
@@ -175,6 +174,43 @@ int main() {
     printf("Print the Superblock info: ");
     print_fs();
     printf("\nWe were pleased to present our file system implementation!\n");
+
+    printf("\n*************************************************\n");
+
+    myFILE *myfd = myfopen("home/Task7/BIG", "r");
+    if (sizeof (myfd->data)>0) {
+        printf("Test function: myfopen | data | status: Passed\n");
+    } else {
+        printf("Test function: myopen| data  | status: Failed\n");
+    }
+    if (sizeof (myfd->mode)>0) {
+        printf("Test function: myfopen | mode | status: Passed\n");
+    } else {
+        printf("Test function: myopen| mode  | status: Failed\n");
+    }
+    if ( (myfd->size)== (strlen (string2)-42)) {// we remove the size because we want only the string
+        printf("Test function: myfopen | size | status: Passed\n");
+    } else {
+        printf("Test function: myopen| size  | status: Failed\n");
+    }
+    if (sizeof (myfd->pointerFile)>0) {
+        printf("Test function: myfopen | pointerFile | status: Passed\n");
+    } else {
+        printf("Test function: myopen| pointerFile  | status: Failed\n");
+    }
+    if (sizeof (myfd->fd)>0) {
+        printf("Test function: myfopen | fd | status: Passed\n");
+    } else {
+        printf("Test function: myopen| fd  | status: Failed\n");
+    }
+    char test[5];
+    int myFread= myfread(test,1,5, myfd);;
+    if  (myFread>0) {
+        printf("Test function: myfopen | fd | status: Passed\n");
+    } else {
+        printf("Test function: myopen| fd  | status: Failed\n");
+    }
+    printf("\n*************************************************\n");
 
     return 0;
 }

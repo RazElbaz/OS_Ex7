@@ -1,9 +1,6 @@
 #include "myfs.h"
 
-struct superblock sb;
-struct inode *inodes;
-struct disk_block *dbs;
-struct myopenfile myopenfiles[MAX_FILES];
+
 
 
 void create_fs() {
@@ -284,14 +281,11 @@ int mylseek(int myfd, off_t offset, int whence) {
      *  lseek() repositions the file offset of the open file description
        associated with the file descriptor fd to the argument offset
        according to the directive whence as follows:
-
        SEEK_SET
               The file offset is set to offset bytes.
-
        SEEK_CUR
               The file offset is set to its current location plus offset
               bytes.
-
        SEEK_END
               The file offset is set to the size of the file plus offset
               bytes.
@@ -393,7 +387,6 @@ int myopen(const char *pathname, int flags) {
    non negative integer that is an index to an entry in the process's
    table of open file descriptors.
    @credit: https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm
-
  */
     if(!pathname){return -1;}
     char str[100],curr[8], old[8];

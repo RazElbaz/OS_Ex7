@@ -35,6 +35,10 @@ struct mydirent{
     char inside[50];
 };
 
+ struct superblock sb;
+ struct inode *inodes;
+ struct disk_block *dbs;
+ struct myopenfile myopenfiles[MAX_FILES];
 //the basic file system implementation:
 ///credit: https://www.youtube.com/watch?v=n2AAhiujAqs&ab_channel=drdelhart
 void create_fs();// initialize new file system
