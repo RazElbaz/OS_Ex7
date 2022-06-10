@@ -31,18 +31,25 @@ struct mydirent *myreaddir(myDIR *dirp);
 
 int myclosedir(myDIR *dirp);
 
-Additional facilitations and guidelines
-1. There is no limit to fields in * myDIR. Mydirent structure must contain a name_d field that contains the name
-The file can contain additional fields as you wish.
-2. You must maintain a table of open myfd files - you can save as much as you want in this table.
-You may assume that you have a global variable [FILES_MAX [myopenfile struct when
- FILES_MAX is fixed and set to 10000. You can enter any information you want in myopenfile struct
-Additional global variables can be set if you find it necessary.
-3.myopen will only work on a file system assembled by mymount
-4 .myclose, mylseek, mywrite, myread will only work on files opened by myopen
-5. All functions will be available using so.libmyfs directory and can be used by one # include
-myfs.h l
-6. No need to support fragments and permissions.
+Mylibc
+Above the file system) implemented in the previous section (yours you must implement the structure
+myFILE *
+And the functions:
+myFILE *myfopen(const char *restrict pathname, const char*restrict mode)
+
+int myfclose(myFILE *stream);
+
+size_t myfread(void *restrict ptr, size_t size, size_t nmemb,
+
+myFILE *restrict stream);
+
+size_t myfwrite(const void *restrict ptr, size_t size, size_t nmemb, myFILE *restrict stream);
+
+int myfseek(myFILE *stream, long offset, int whence);
+
+int myfscanf(myFILE *restrict stream,const char *restrict format, ...);
+
+int myfprintf(myFILE *restrict stream, const char *restrict format, ...);
 
 
 
