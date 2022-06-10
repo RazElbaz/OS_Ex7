@@ -61,5 +61,4 @@ In order to run the tests for the file system, do the following:
 1. ```make```
 2. run ```./test```
 3. enjoy seeing the tests 😊!  
-4. 
 * We implemented errno for the functions above
