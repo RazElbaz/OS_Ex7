@@ -34,11 +34,11 @@ int myclosedir(myDIR *dirp);
 
 ## Mylibc
 
-```
-Above the file system) implemented in the previous section (yours you must implement the structure
-myFILE *
-And the functions:
 
+Above the file system) implemented in the previous section (yours you must implement the structure myFILE *
+
+And the functions:
+```
 myFILE *myfopen(const char *restrict pathname, const char*restrict mode)
 
 int myfclose(myFILE *stream);
