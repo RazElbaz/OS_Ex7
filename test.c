@@ -4,9 +4,9 @@
 #include "assert.h"
 #include "mylibc.h"
 int main() {
-    printf("*****************************************\n");
-    printf("Welcome to our file system implementation\n");
-    printf("*****************************************\n");
+    printf("*******************************************************************\n");
+    printf("============ Welcome to our file system implementation ============\n");
+    printf("*******************************************************************\n");
     create_fs();
     ///Test myopendir functuin:
     int openDir1 = myopendir("home/Task7");
@@ -170,12 +170,14 @@ int main() {
     }
 
 
-    printf("\n*************************************************\n");
+    printf("*************************************************\n");
     printf("Print the Superblock info: ");
     print_fs();
     printf("\nWe were pleased to present our file system implementation!\n");
 
-    printf("\n*************************************************\n");
+    printf("*********************************************************************************\n");
+    printf("============ Welcome to our file system implementation | MYLIBC TEST ============\n");
+    printf("*********************************************************************************\n");
 
     myFILE *myfd = myfopen("home/Task7/BIG", "r");
     if (sizeof (myfd->data)>0) {
@@ -210,36 +212,50 @@ int main() {
     } else {
         printf("Test function: myfwrite  | status: Failed\n");
     }
-//    ///Test myfwrite
-//    char *read = NULL;
-//    int myFread=myfread(read,1, 5,myfd);
-//    if  (myFread>0) {
-//        printf("Test function: myfread | status: Passed\n");
-//    } else {
-//        printf("Test function: myfread  | status: Failed\n");
-//    }
+    ///Test myfwrite
+    char read[256];
+    int myFread = myfread(read,1, 256, myfd);
+    if  (myFread>0) {
+        printf("Test function: myfread | status: Passed\n");
+    } else {
+        printf("Test function: myfread  | status: Failed\n");
+    }
 
 
     ///Test myfprintf
-    char c = 'R';
-    int n = 10;
-    printf("%d\n",myfd->size);
-    if  (myfprintf(myfd, "%c%d", c, n)) {
-        printf("%c %d\n", c,n);
+    char input_ch = 'R';
+    int input_num = 10;
+    if  (myfprintf(myfd, "%c%d", input_ch, input_num)) {
         printf("Test function: myfprintf | status: Passed\n");
     } else {
         printf("Test function: myfprintf  | status: Failed\n");
     }
-    printf("%d\n",myfd->size);
 
-    ///Test myfprintf
-//    myfscanf(myfd, "%c%d", &c, &n);
-//    if  () {
-//        printf("Test function: myfprintf | status: Passed\n");
-//    } else {
-//        printf("Test function: myfprintf  | status: Failed\n");
-//    }
-    printf("\n*************************************************\n");
+    //Test myfscanf
+    if  (myfscanf(myfd, "%c%d", &input_ch, &input_num)) {
+        printf("The input char and number (accordingly) are: %c, %d!\n", input_ch, input_num);
+        printf("Test function: myfscanf | status: Passed\n");
+    } else {
+        printf("Test function: myfscanf  | status: Failed\n");
+    }
 
+    //Test myfseek
+    int resFseek = myfseek(myfd, 1, 1);
+    assert(resFseek != -1);
+    if  (resFseek != -1) {
+        printf("Test function: myfseek | status: Passed\n");
+    } else {
+        printf("Test function: myfseek  | status: Failed\n");
+    }
+
+    /* Check fclose function*/
+    int res = myfclose(myfd);
+    assert(res != -1);
+    if  (res != -1) {
+        printf("Test function: myfclose | status: Passed\n");
+    } else {
+        printf("Test function: myfclose  | status: Failed\n");
+    }
+    printf("*************************************************\n");
     return 0;
 }

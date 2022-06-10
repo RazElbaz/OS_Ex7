@@ -76,9 +76,11 @@ size_t myfread(void * ptr, size_t size, size_t nmemb, myFILE * stream){
         ptr is the location in memory to begin saving the data.
         stream is the FILE * pointer to use when reading, often the result of fopen().
      */
-     int bytes=nmemb*size+1,  i=0;
-    char* fileRead= malloc((sizeof( char))* bytes);
-    while(i<bytes-1||stream->pointerFile>stream->size){
+    int bytes, i;
+    i = 0;
+    bytes = nmemb*size+1;
+    char* fileRead= (char*) malloc(bytes);
+    while(i < bytes-1){
         fileRead[i]=stream->data[(stream->pointerFile++)+i];
         i++;
     }
@@ -158,7 +160,7 @@ int myfseek(myFILE *stream, long offset, int whence){
 
 }
 int myfscanf(myFILE * stream, const char * format, ...){
-    int loops=(int)strlen(format);
+    int loops = (int)strlen(format);
     va_list arguments;
     va_start(arguments, format);
     int* d_scanf = va_arg(arguments, void*);
@@ -181,7 +183,9 @@ int myfscanf(myFILE * stream, const char * format, ...){
                 myfread(&c_scanf, sizeof(char), 1, stream);
                 break;
                 // whence doesn't match any case constant d, f, c pass
-        }}}
+           }
+        }
+    }
     return index;
 }
 int myfprintf(myFILE * stream, const char * format, ...){

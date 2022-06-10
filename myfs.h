@@ -2,6 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "stdbool.h"
+
+/**
+ * For the basic file system implementation:
+ * Credit to https://www.youtube.com/watch?v=n2AAhiujAqs&t=19s&ab_channel=drdelhart
+ */
+
 #define  BLOCK_SIZE 512
 #define MAX_FILES 10000
 struct superblock {
@@ -35,12 +41,11 @@ struct mydirent{
     char inside[50];
 };
 
- struct superblock sb;
- struct inode *inodes;
- struct disk_block *dbs;
- struct myopenfile myopenfiles[MAX_FILES];
-//the basic file system implementation:
-///credit: https://www.youtube.com/watch?v=n2AAhiujAqs&ab_channel=drdelhart
+struct superblock sb;
+struct inode *inodes;
+struct disk_block *dbs;
+struct myopenfile myopenfiles[MAX_FILES];
+
 void create_fs();// initialize new file system
 void syns_fs();//write the file system
 void mount_fs();//load file system

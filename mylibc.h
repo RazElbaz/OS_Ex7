@@ -5,7 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+
 #define EOF '\0'
+
 typedef struct myFILE {
     char* mode; //r,r+,w,a
     char *data;
@@ -13,8 +15,6 @@ typedef struct myFILE {
     int size;
     int pointerFile;
 }myFILE;
-
-
 
 myFILE* myfopen(const char *pathname, const char *mode);
 int myfclose(myFILE *stream);
