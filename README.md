@@ -5,7 +5,7 @@ The final submission will include a stack server (component I) implementing mult
 process shared memory and locking routines
 
 ## Tasks:
-File system within a file
+# File system within a file
 Realize a system close to ufs within a file. You must implement the following functions
 mymkfs (1)
 A program that creates the file in which you will find a file system receives a s parameter that describes the size
@@ -31,10 +31,11 @@ struct mydirent *myreaddir(myDIR *dirp);
 
 int myclosedir(myDIR *dirp);
 
-Mylibc
+# Mylibc
 Above the file system) implemented in the previous section (yours you must implement the structure
 myFILE *
 And the functions:
+
 myFILE *myfopen(const char *restrict pathname, const char*restrict mode)
 
 int myfclose(myFILE *stream);
