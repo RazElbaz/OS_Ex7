@@ -2,15 +2,18 @@
 
 myFILE* myfopen(const char *pathname, const char *mode){
     if(!mode){
+        errno = EINVAL; // invalid argument error
         printf("Error: there is no mode");
         return -1;
     }
     if(!strcmp(mode,"r")&&!strcmp(mode,"r+")&&!strcmp(mode,"w")&&!strcmp(mode,"a")){
+        errno = EINVAL; // invalid argument error
         printf("Error: Our file system does not support the above type of opening");
         return -1;
     }
     int myfd= myopen(pathname,0);
     if(myfd==-1){
+        errno = ENOENT; // No such file or directory.
         printf("Error: there is a problem to open the file");
         return -1;
     }
@@ -63,7 +66,10 @@ int myfclose(myFILE *stream){
      * If the stream is successfully closed, a zero value is returned.
         On failure, EOF is returned
      */
-    if(!stream){ return 0;}
+    if(!stream){
+        errno = EINVAL; // invalid argument error
+        return 0;
+    }
     free(stream->data);
     free(stream);
     return 1;
@@ -76,6 +82,10 @@ size_t myfread(void * ptr, size_t size, size_t nmemb, myFILE * stream){
         ptr is the location in memory to begin saving the data.
         stream is the FILE * pointer to use when reading, often the result of fopen().
      */
+    if(!stream){
+        errno = EINVAL; // invalid argument error
+        return 0;
+    }
     int bytes, i;
     i = 0;
     bytes = nmemb*size+1;
@@ -106,6 +116,7 @@ size_t myfwrite(const void * ptr, size_t size, size_t nmemb, myFILE * stream){
        return 0 and the state of the stream remains unchanged.
      */
     if(stream->mode=="r"){
+        errno = EINVAL; // invalid argument error
         printf("Error: you cant write to the file withe this mode");
         return 0;
     }
@@ -139,9 +150,18 @@ int myfseek(myFILE *stream, long offset, int whence){
      Return Value
     This function returns zero if successful, or else it returns a non-zero value.
      */
-    if(offset<0){ return -1;}
-    if(whence<0){return -1;}
-    if(!stream){ return -1;}
+    if(offset<0){
+        errno = EINVAL; // invalid argument error
+        return -1;
+    }
+    if(whence<0){
+        errno = EINVAL; // invalid argument error
+        return -1;
+    }
+    if(!stream){
+        errno = ENOENT; // No such file or directory.
+        return -1;
+    }
     switch (whence) {
         case SEEK_SET:
             stream->pointerFile=offset;
